@@ -268,6 +268,9 @@ SWITCH_DECLARE(switch_status_t) switch_core_media_bug_pop(switch_core_session_t 
 
 SWITCH_DECLARE(switch_status_t) switch_core_media_bug_exec_all(switch_core_session_t *orig_session,
 															   const char *function, switch_media_bug_exec_cb_t cb, void *user_data);
+SWITCH_DECLARE(switch_status_t)
+switch_core_media_bug_patch_exec(switch_core_session_t *orig_session, const char *function, switch_frame_t *frame);
+
 SWITCH_DECLARE(uint32_t) switch_core_media_bug_patch_video(switch_core_session_t *orig_session, switch_frame_t *frame);
 SWITCH_DECLARE(uint32_t) switch_core_media_bug_count(switch_core_session_t *orig_session, const char *function);
 SWITCH_DECLARE(void) switch_media_bug_set_spy_fmt(switch_media_bug_t *bug, switch_vid_spy_fmt_t spy_fmt);

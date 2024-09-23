@@ -1207,6 +1207,35 @@ SWITCH_DECLARE(switch_status_t) switch_core_media_bug_exec_all(switch_core_sessi
 	return x ? SWITCH_STATUS_SUCCESS : SWITCH_STATUS_FALSE;
 }
 
+SWITCH_DECLARE(switch_status_t) 
+switch_core_media_bug_patch_exec(switch_core_session_t *orig_session, const char *function, switch_frame_t *frame)
+{
+	switch_media_bug_t *bp = NULL;
+	int x = 0;	
+	
+	if (!frame || !frame->img) 
+	{ 
+		return SWITCH_STATUS_FALSE; 
+	}
+
+	if (orig_session->bugs) {
+		switch_thread_rwlock_wrlock(orig_session->bug_rwlock);
+		for (bp = orig_session->bugs; bp; bp = bp->next) {
+			if (!switch_test_flag(bp, SMBF_PRUNE) && !switch_test_flag(bp, SMBF_LOCK) &&
+				!strcmp(bp->function, function) && switch_test_flag(bp, SMBF_VIDEO_PATCH)) {
+				bp->video_ping_frame = frame;
+				if (bp->callback) { 
+					bp->callback(bp, bp->user_data, SWITCH_ABC_TYPE_VIDEO_PATCH);
+				}				
+				x++;
+			}
+		}
+		switch_thread_rwlock_unlock(orig_session->bug_rwlock);
+	}
+
+	return x ? SWITCH_STATUS_SUCCESS : SWITCH_STATUS_FALSE;
+}
+
 SWITCH_DECLARE(switch_status_t) switch_core_media_bug_enumerate(switch_core_session_t *session, switch_stream_handle_t *stream)
 {
 	switch_media_bug_t *bp;

@@ -504,6 +504,7 @@ typedef struct mcu_layer_s {
 	switch_mutex_t *overlay_mutex;
 	switch_core_video_filter_t overlay_filters;
 	int manual_border;
+	switch_mutex_t *logo_mutex;
 } mcu_layer_t;
 
 typedef struct video_layout_s {
